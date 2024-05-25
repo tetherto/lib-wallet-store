@@ -23,7 +23,6 @@ class WalletStoreMemory extends WalletStore {
   }
 
   get (key) {
-    console.log(cache)
     return this.db.get(key)
   }
 
