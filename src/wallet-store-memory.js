@@ -13,7 +13,7 @@ class WalletStoreMemory extends WalletStore {
   }
 
   newInstance(opts) {
-    const n = `${this.name}-%${opts.name || 'default'}`
+    const n = `${this.name}-${opts.name || 'default'}`
     if(cache.has(n)) {
       return cache.get(n)
     }
@@ -23,6 +23,7 @@ class WalletStoreMemory extends WalletStore {
   }
 
   get (key) {
+    console.log(cache)
     return this.db.get(key)
   }
 
