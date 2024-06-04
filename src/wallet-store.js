@@ -24,6 +24,8 @@ class WalletStore {
   some(cb) {}
   // @desc: iterate over all values
   entries(cb) {}
+
+  close() {}
 }
 
 module.exports = WalletStore

@@ -6,10 +6,15 @@ class WalletStoreMemory extends WalletStore {
     super(config)
     this.name = config?.name || 'default_'+Date.now()
     this.db = new Map()
+    this._stop = false
   }
 
   async init() {
     this.ready = true
+  }
+
+  close() {
+    this._stop = true
   }
 
   newInstance(opts) {
@@ -28,6 +33,7 @@ class WalletStoreMemory extends WalletStore {
 
   async put (key, val) {
     this.db.set(key, val)
+    return val
   }
 
   async delete(key) {
@@ -42,7 +48,7 @@ class WalletStoreMemory extends WalletStore {
   clear() {
     this.db.clear()
   }
-
+ 
   import(snapshot) {
     this.db = new Map(Object.entries(snapshot));
   }
@@ -52,14 +58,15 @@ class WalletStoreMemory extends WalletStore {
       if(await cb(key, value)) {
         return true
       }
+      if(this._stop) return
     }
     return false 
   }
 
   async entries(cb) {
-
     for await (let [key, value] of this.db.entries()) {
       await cb(key, value)
+      if(this._stop) return
     }
   }
 }
