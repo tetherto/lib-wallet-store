@@ -9,7 +9,7 @@ class WalletStoreHyperbee extends WalletStore {
   constructor(config = {}) {
     super(config)
     this.name = config?.name || 'default_'+Date.now()
-    const store
+    let store;
     if(config.store_path) {
       store = config.store_path
     } else {
