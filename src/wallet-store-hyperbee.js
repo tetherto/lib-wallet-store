@@ -4,12 +4,14 @@ const Hyperbee = require('hyperbee')
 const Hypercore = require('hypercore')
 const RAM = require('random-access-memory')
 
-const cache = new Map()
 class WalletStoreHyperbee extends WalletStore {
   constructor(config = {}) {
     super(config)
-    this.name = config?.name || 'default_'+Date.now()
+    this.name = config?.name || 'default_'
     let store;
+    if(!config._cache) {
+      this._cache = new Map()
+    }
     if(config.store_path) {
       store = config.store_path
       this.store_path = config.store_path
@@ -19,7 +21,6 @@ class WalletStoreHyperbee extends WalletStore {
     if(config.hyperbee) {
       this.db = config.hyperbee
     } else {
-      console.log(store)
       const core = new Hypercore(store)
       this.db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'utf-8' })
     }
@@ -39,11 +40,13 @@ class WalletStoreHyperbee extends WalletStore {
     if(this.store_path) {
       opts.store_path = this.store_path+'/'+n
     }
-    if(cache.has(n)) {
-      return cache.get(n)
+    if(this._cache.has(n)) {
+      return this._cache.get(n)
     }
+
+    opts._cache = this._cache
     const instance =  new WalletStoreHyperbee(opts)
-    cache.set(n, instance)
+    this._cache.set(n, instance)
     return instance
   }
 
