@@ -9,7 +9,12 @@ class WalletStoreHyperbee extends WalletStore {
   constructor(config = {}) {
     super(config)
     this.name = config?.name || 'default_'+Date.now()
-    const store = config?.ram || RAM
+    const store
+    if(config.store_path) {
+      store = config.store_path
+    } else {
+      store = memory
+    }
     if(config.hyperbee) {
       this.db = config.hyperbee
     } else {
