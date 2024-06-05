@@ -12,12 +12,14 @@ class WalletStoreHyperbee extends WalletStore {
     let store;
     if(config.store_path) {
       store = config.store_path
+      this.store_path = config.store_path
     } else {
       store = RAM
     }
     if(config.hyperbee) {
       this.db = config.hyperbee
     } else {
+      console.log(store)
       const core = new Hypercore(store)
       this.db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'utf-8' })
     }
@@ -34,6 +36,9 @@ class WalletStoreHyperbee extends WalletStore {
 
   newInstance(opts) {
     const n = `${this.name}-${opts.name || 'default'}`
+    if(this.store_path) {
+      opts.store_path = this.store_path+'/'+n
+    }
     if(cache.has(n)) {
       return cache.get(n)
     }
