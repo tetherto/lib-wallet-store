@@ -13,7 +13,7 @@ class WalletStoreHyperbee extends WalletStore {
     if(config.store_path) {
       store = config.store_path
     } else {
-      store = memory
+      store = RAM
     }
     if(config.hyperbee) {
       this.db = config.hyperbee
