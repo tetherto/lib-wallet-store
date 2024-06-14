@@ -51,12 +51,14 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async has (k) {
+    if(!this.db.readable) return 
     const v = await this.db.get(k)
     if(!v) return null
     return true
   }
 
   async get (key) {
+    if(!this.db.readable) return 
     const d = await this.db.get(key)
     if(!d) return null
     return this._parseValue(d.value)
@@ -67,12 +69,15 @@ class WalletStoreHyperbee extends WalletStore {
     try {
       res = JSON.parse(v)
     } catch(err) {
+      console.log(err)
+      console.log(v)
       return v
     }
     return res
   }
 
   async put (key, val, opts) {
+    if(!this.db.writable) return 
     let res = val
     if(typeof val === 'object') {
       try {
@@ -86,15 +91,15 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async delete(key, opts) {
+    if(!this.db.writable) return 
     return this.db.del(key, opts)
   }
 
   export() {
-    const obj = Object.fromEntries(obj);
-    return JSON.stringify(obj, null, 2)
   }
 
   clear() {
+    if(!this.db.writable) return 
     this.db.clear()
   }
  
@@ -103,6 +108,7 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async some(cb, opts) {
+    if(!this.db.readable) return 
     const read = this.db.createReadStream(opts)
     for await (let data of read) {
       if(!this.db.readable) return 
@@ -114,6 +120,7 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async entries(cb, opts) {
+    if(!this.db.readable) return 
     const read = this.db.createReadStream(opts)
     for await (let data of read) {
       if(!this.db.readable) return 
