@@ -98,8 +98,8 @@ class WalletStoreHyperbee extends WalletStore {
 
   clear() {
     if(!this.db.writable) return 
-    this.entries((k) => {
-      this.db.put(k,null)
+    return this.entries((k) => {
+      return this.db.put(k,null)
     })
   }
  
