@@ -69,8 +69,6 @@ class WalletStoreHyperbee extends WalletStore {
     try {
       res = JSON.parse(v)
     } catch(err) {
-      console.log(err)
-      console.log(v)
       return v
     }
     return res
@@ -100,7 +98,9 @@ class WalletStoreHyperbee extends WalletStore {
 
   clear() {
     if(!this.db.writable) return 
-    this.db.clear()
+    this.entries((k) => {
+      this.db.put(k,null)
+    })
   }
  
   import(snapshot) {
