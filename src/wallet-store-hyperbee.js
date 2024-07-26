@@ -7,7 +7,7 @@ const RAM = require('random-access-memory')
 class WalletStoreHyperbee extends WalletStore {
   constructor(config = {}) {
     super(config)
-    this.name = config?.name || 'default_'
+    this.name = config?.name || 'default'
     let store;
     if(!config._cache) {
       this._cache = new Map()
@@ -17,6 +17,7 @@ class WalletStoreHyperbee extends WalletStore {
       this.store_path = config.store_path
     } else {
       store = RAM
+      this.store_path = null
     }
     if(config.hyperbee) {
       this.db = config.hyperbee
@@ -32,19 +33,25 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async close() {
-    return this.db.close()
+    await this.db.close()
+    if(this.config._cache) {
+      this.config._cache.delete(this.config._cache_name)
+    }
   }
 
   newInstance(opts) {
+    if(!opts.name) throw new Error('instance needs a name')
+
     const n = `${this.name}-${opts.name || 'default'}`
+
     if(this.store_path) {
       opts.store_path = this.store_path+'/'+n
-    }
-    if(this._cache.has(n)) {
-      return this._cache.get(n)
-    }
+    } 
+    const exists = this._cache.get(n)
+    if(exists) return exists
 
     opts._cache = this._cache
+    opts._cache_name = n
     const instance =  new WalletStoreHyperbee(opts)
     this._cache.set(n, instance)
     return instance
