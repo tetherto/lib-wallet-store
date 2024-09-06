@@ -7,11 +7,8 @@ const RAM = require('random-access-memory')
 class WalletStoreHyperbee extends WalletStore {
   constructor(config = {}) {
     super(config)
-    this.name = config?.name || 'default'
     let store;
-    if(!config._cache) {
-      this._cache = new Map()
-    }
+
     if(config.store_path) {
       store = config.store_path
       this.store_path = config.store_path
@@ -100,7 +97,14 @@ class WalletStoreHyperbee extends WalletStore {
     return this.db.del(key, opts)
   }
 
-  export() {
+  async dump(opts = {}, dir) {
+
+    const obj = {}
+    return this.entries((k,v) => {
+      obj[k] = v
+    })
+
+    return JSON.stringify(obj,null,2)
   }
 
   clear() {

@@ -4,6 +4,10 @@ class WalletStore {
   constructor(config) {
     this.config = config
     this.ready = false
+    this.name = config?.name || 'default'
+    if(!config._cache) {
+      this._cache = new Map()
+    }
   }
   async init() {}
   // @desc: create a new instance of the store. equivalent to creating table, or Leveldb db
