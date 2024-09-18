@@ -23,7 +23,7 @@ class WalletStore {
     }
   }
 
-  async init () {}
+  init () {}
   // @desc: create a new instance of the store. equivalent to creating table, or Leveldb db
   newInstance (opts) {}
   // @desc: get value from store

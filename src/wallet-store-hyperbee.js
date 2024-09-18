@@ -25,13 +25,10 @@ class WalletStoreHyperbee extends WalletStore {
     if (!config._cache) {
       this._cache = new Map()
     }
-    if (config.store_path) {
-      store = config.store_path
-      this.store_path = config.store_path
-    } else {
-      store = RAM
-      this.store_path = null
-    }
+
+    store = config.store_path || RAM;
+    this.store_path = config.store_path || null; 
+
     if (config.hyperbee) {
       this.db = config.hyperbee
     } else {
@@ -41,7 +38,13 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async init () {
-    await this.db.ready()
+    try {
+      await this.db.ready()
+    } catch(err) {
+      console.log('hyperbee failed to start', err)
+      throw err
+    }
+
     this.ready = true
   }
 
