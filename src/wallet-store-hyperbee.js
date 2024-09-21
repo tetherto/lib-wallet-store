@@ -98,7 +98,6 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async put (key, val, opts) {
-    if (!this.ready) throw new Error('store not ready')
     if (!this.db.writable) return
     let res = val
     if (typeof val === 'object') {
