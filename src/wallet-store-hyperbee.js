@@ -25,12 +25,12 @@ class WalletStoreHyperbee extends WalletStore {
       this._cache = new Map()
     }
 
-    this.store_path = config.store_path || null; 
+    this.store_path = config.store_path || null
 
     if (config.hyperbee) {
       this.db = config.hyperbee
     } else {
-      const store = config.store_path || RAM;
+      const store = config.store_path || RAM
       const core = new Hypercore(store)
       this.db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'utf-8' })
     }
@@ -39,7 +39,7 @@ class WalletStoreHyperbee extends WalletStore {
   async init () {
     try {
       await this.db.ready()
-    } catch(err) {
+    } catch (err) {
       console.log('hyperbee failed to start', err)
       throw err
     }
@@ -72,9 +72,9 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async has (k) {
-    if (!this.db.readable) return
+    if (!this.db.readable) return null
     const v = await this.db.get(k)
-    if (!v) return null
+    if (!v) return false
     return true
   }
 
@@ -114,13 +114,6 @@ class WalletStoreHyperbee extends WalletStore {
     return this.db.del(key, opts)
   }
 
-  async dump (opts = {}, dir) {
-    const obj = {}
-    return this.entries((k, v) => {
-      obj[k] = v
-    })
-  }
-
   clear () {
     if (!this.db.writable) return
     return this.entries((k) => {
@@ -136,7 +129,6 @@ class WalletStoreHyperbee extends WalletStore {
     if (!this.db.readable) return
     const read = this.db.createReadStream(opts)
     for await (const data of read) {
-      if (!this.db.readable) return
       if (await cb(data.key, this._parseValue(data.value))) {
         return true
       }
@@ -145,10 +137,9 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async entries (cb, opts) {
-    if (!this.db.readable) return
+    if (!this.db.readable) return null
     const read = this.db.createReadStream(opts)
     for await (const data of read) {
-      if (!this.db.readable) return
       await cb(data.key, this._parseValue(data.value))
     }
   }
