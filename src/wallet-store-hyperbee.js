@@ -16,7 +16,6 @@
 const WalletStore = require('./wallet-store')
 const Hyperbee = require('hyperbee')
 const Hypercore = require('hypercore')
-const RAM = require('random-access-memory')
 
 class WalletStoreHyperbee extends WalletStore {
   constructor (config = {}) {
@@ -26,7 +25,7 @@ class WalletStoreHyperbee extends WalletStore {
       this._cache = new Map()
     }
 
-    this.store_path = config.store_path || null; 
+    this.store_path = config.store_path || null
 
     if (config.hyperbee) {
       this.db = config.hyperbee
@@ -39,7 +38,7 @@ class WalletStoreHyperbee extends WalletStore {
   async init () {
     try {
       await this.db.ready()
-    } catch(err) {
+    } catch (err) {
       console.log('hyperbee failed to start', err)
       throw err
     }
