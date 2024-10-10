@@ -26,7 +26,6 @@ class WalletStoreHyperbee extends WalletStore {
       this._cache = new Map()
     }
 
-    store = config.store_path || RAM;
     this.store_path = config.store_path || null; 
 
     if (config.hyperbee) {
@@ -44,7 +43,6 @@ class WalletStoreHyperbee extends WalletStore {
       console.log('hyperbee failed to start', err)
       throw err
     }
-
     this.ready = true
   }
 
@@ -74,14 +72,14 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async has (k) {
-    if (!this.db.readable) return
+    if (!this.db.readable) return null
     const v = await this.db.get(k)
     if (!v) return null
     return true
   }
 
   async get (key) {
-    if (!this.db.readable) return
+    if (!this.db.readable) return null
     const d = await this.db.get(key)
     if (!d) return null
     return this._parseValue(d.value)
@@ -98,7 +96,7 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async put (key, val, opts) {
-    if (!this.db.writable) return
+    if (!this.db.writable) return null
     let res = val
     if (typeof val === 'object') {
       try {
@@ -114,13 +112,6 @@ class WalletStoreHyperbee extends WalletStore {
   async delete (key, opts) {
     if (!this.db.writable) return
     return this.db.del(key, opts)
-  }
-
-  async dump (opts = {}, dir) {
-    const obj = {}
-    return this.entries((k, v) => {
-      obj[k] = v
-    })
   }
 
   clear () {
