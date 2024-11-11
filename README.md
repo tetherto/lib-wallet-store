@@ -1,6 +1,18 @@
+<p align="center" width="100">
+<a href="https://github.com/tetherto/lib-wallet">
+<img src="https://github.com/tetherto/lib-wallet/blob/main/docs/logo.svg" width="200"/>
+</a>
+</p>
+
+
 # lib-wallet-store 💼🗃️
 
 A flexible and extensible library for wallet data storage, supporting multiple storage engine implementations.
+
+## 💼 Wallet SDK
+This library is part of the [Wallet SDK](https://github.com/tetherto/lib-wallet). 
+
+
 
 ## 📚 Table of Contents
 
