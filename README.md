@@ -26,13 +26,6 @@ lib-wallet-store provides a consistent interface for wallet data storage, allowi
 - 🧩 Support for multiple instances
 - 🔐 Designed for wallet data management
 
-## 🚀 Installation
-
-To install lib-wallet-store and its core dependencies, run:
-
-```bash
-npm install lib-wallet-store
-```
 
 ## 🔧 Usage
 
