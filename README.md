@@ -73,7 +73,7 @@ To set up the development environment:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/lib-wallet-store.git
+   git clone https://github.com/tetherto/lib-wallet-store.git
    cd lib-wallet-store
    ```
 
@@ -99,8 +99,6 @@ To run the tests:
    ```bash
    node wallet-store-hyperbee-tests.js
    ```
-
-To add new tests, create test cases in the `wallet-store-hyperbee-tests.js` file or create new test files for different storage engines.
 
 ## 🤝 Contributing
 
