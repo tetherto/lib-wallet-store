@@ -102,7 +102,7 @@ To run the tests:
 
 2. Run the tests:
    ```bash
-   node wallet-store-hyperbee-tests.js
+   npm run test
    ```
 
 ## 🤝 Contributing
