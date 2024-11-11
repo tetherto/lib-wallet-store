@@ -1,6 +1,18 @@
+<p align="center" width="100">
+<a href="https://github.com/tetherto/lib-wallet">
+<img src="https://github.com/tetherto/lib-wallet/blob/main/docs/logo.svg" width="200"/>
+</a>
+</p>
+
+
 # lib-wallet-store 💼🗃️
 
 A flexible and extensible library for wallet data storage, supporting multiple storage engine implementations.
+
+## 💼 Wallet SDK
+This library is part of the [Wallet SDK](https://github.com/tetherto/lib-wallet). 
+
+
 
 ## 📚 Table of Contents
 
@@ -26,13 +38,6 @@ lib-wallet-store provides a consistent interface for wallet data storage, allowi
 - 🧩 Support for multiple instances
 - 🔐 Designed for wallet data management
 
-## 🚀 Installation
-
-To install lib-wallet-store and its core dependencies, run:
-
-```bash
-npm install lib-wallet-store
-```
 
 ## 🔧 Usage
 
@@ -73,7 +78,7 @@ To set up the development environment:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/lib-wallet-store.git
+   git clone https://github.com/tetherto/lib-wallet-store.git
    cd lib-wallet-store
    ```
 
@@ -97,10 +102,8 @@ To run the tests:
 
 2. Run the tests:
    ```bash
-   node wallet-store-hyperbee-tests.js
+   npm run test
    ```
-
-To add new tests, create test cases in the `wallet-store-hyperbee-tests.js` file or create new test files for different storage engines.
 
 ## 🤝 Contributing
 
