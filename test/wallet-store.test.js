@@ -103,12 +103,7 @@ test('WalletStoreHyperbee - New instance', async (t) => {
 })
 
 
-// Create a temporary directory for testing
-//const tmpDir = path.join(os.tmpdir(), 'wallet-store-test-' + Math.random().toString(16).slice(2))
 const tmpDir = "./data"
-//fs.mkdirSync(tmpDir)
-
-// Test case 1: Verify multiple instances with same path and lock throw error
 test('should throw when creating multiple instances with same path and lock', async (t) => {
   const config = {
     store_path: path.join(tmpDir, 'db1'),
@@ -126,7 +121,7 @@ test('should throw when creating multiple instances with same path and lock', as
   t.ok(i1a._store_config.lock === true, 'sub db is locked')
 
 
-
+  fs.rmSync(tmpDir, { recursive: true, force: true })
 })
 test('should not  when creating multiple instances with same path and lock', async (t) => {
   const config = {
@@ -135,16 +130,15 @@ test('should not  when creating multiple instances with same path and lock', asy
   }
   const i1 = new WalletStoreHyperbee(config)
   await i1.init()
+  await i1.put("hello", "world")
   const i2 = new WalletStoreHyperbee(config)
   await i2.init()
-
-
-  await i1.put("hello", "world")
   let res = await i2.get("hello")
   t.ok(res === "world", "read and write from different instances")
 
   const i1a = i1.newInstance({ name : "subdb"})
   t.ok(i1a._store_config.lock === false, 'sub db is not locked')
 
+  fs.rmSync(tmpDir, { recursive: true, force: true })
 })
 
