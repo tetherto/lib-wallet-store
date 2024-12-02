@@ -28,17 +28,17 @@ class WalletStoreHyperbee extends WalletStore {
     }
 
     this.store_path = config.store_path || null
-    let store 
-    if(config.store_path) {
+    let store
+    if (config.store_path) {
       const opts = {
-        lock : config.lock
+        lock: config.lock
       }
       this._store_config = opts
       store = (name) => {
         return new RAF(path.join(this.store_path, name), opts)
       }
     } else {
-      store = RAM 
+      store = RAM
     }
 
     if (config.hyperbee) {
@@ -50,11 +50,7 @@ class WalletStoreHyperbee extends WalletStore {
   }
 
   async init () {
-    try {
-      await this.db.ready()
-    } catch (err) {
-      throw err
-    }
+    await this.db.ready()
     this.ready = true
   }
 
@@ -74,7 +70,7 @@ class WalletStoreHyperbee extends WalletStore {
       opts.store_path = this.store_path + '/' + n
       opts = {
         ...this._store_config,
-        ... opts
+        ...opts
       }
     }
     const exists = this._cache.get(n)
