@@ -17,6 +17,8 @@ const WalletStore = require('./wallet-store')
 const Hyperbee = require('hyperbee')
 const Hypercore = require('hypercore')
 const RAM = require('random-access-memory')
+const RAF = require('random-access-file')
+const path = require('path')
 
 class WalletStoreHyperbee extends WalletStore {
   constructor (config = {}) {
@@ -26,23 +28,29 @@ class WalletStoreHyperbee extends WalletStore {
     }
 
     this.store_path = config.store_path || null
+    let store
+    if (config.store_path) {
+      const opts = {
+        lock: config.lock
+      }
+      this._store_config = opts
+      store = (name) => {
+        return new RAF(path.join(this.store_path, name), opts)
+      }
+    } else {
+      store = RAM
+    }
 
     if (config.hyperbee) {
       this.db = config.hyperbee
     } else {
-      const store = config.store_path || RAM
       const core = new Hypercore(store)
       this.db = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'utf-8' })
     }
   }
 
   async init () {
-    try {
-      await this.db.ready()
-    } catch (err) {
-      console.log('hyperbee failed to start', err)
-      throw err
-    }
+    await this.db.ready()
     this.ready = true
   }
 
@@ -60,6 +68,10 @@ class WalletStoreHyperbee extends WalletStore {
 
     if (this.store_path) {
       opts.store_path = this.store_path + '/' + n
+      opts = {
+        ...this._store_config,
+        ...opts
+      }
     }
     const exists = this._cache.get(n)
     if (exists) return exists
@@ -74,7 +86,7 @@ class WalletStoreHyperbee extends WalletStore {
   async has (k) {
     if (!this.db.readable) return null
     const v = await this.db.get(k)
-    if (!v) return false
+    if (!v) return null
     return true
   }
 

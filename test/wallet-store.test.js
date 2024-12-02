@@ -16,6 +16,9 @@
 const test = require('brittle')
 const WalletStoreHyperbee = require('../src/wallet-store-hyperbee')
 
+const path = require('path')
+const fs = require('fs')
+
 test('WalletStoreHyperbee - Basic operations', async (t) => {
   const store = new WalletStoreHyperbee()
   await store.init()
@@ -96,4 +99,42 @@ test('WalletStoreHyperbee - New instance', async (t) => {
 
   t.is(value1, 'value1', 'Instance 1 should have correct value')
   t.is(value2, 'value2', 'Instance 2 should have correct value')
+})
+
+const tmpDir = './data'
+test('should throw when creating multiple instances with same path and lock', async (t) => {
+  const config = {
+    store_path: path.join(tmpDir, 'db1'),
+    lock: true
+  }
+  const i1 = new WalletStoreHyperbee(config)
+  await i1.init()
+
+  await t.exception(async () => {
+    const i2 = new WalletStoreHyperbee(config)
+    await i2.init()
+  }, /ELOCKED/, 'should throw')
+
+  const i1a = i1.newInstance({ name: 'subdb' })
+  t.ok(i1a._store_config.lock === true, 'sub db is locked')
+
+  fs.rmSync(tmpDir, { recursive: true, force: true })
+})
+test('should not  when creating multiple instances with same path and lock', async (t) => {
+  const config = {
+    store_path: path.join(tmpDir, 'db1'),
+    lock: false
+  }
+  const i1 = new WalletStoreHyperbee(config)
+  await i1.init()
+  await i1.put('hello', 'world')
+  const i2 = new WalletStoreHyperbee(config)
+  await i2.init()
+  const res = await i2.get('hello')
+  t.ok(res === 'world', 'read and write from different instances')
+
+  const i1a = i1.newInstance({ name: 'subdb' })
+  t.ok(i1a._store_config.lock === false, 'sub db is not locked')
+
+  fs.rmSync(tmpDir, { recursive: true, force: true })
 })

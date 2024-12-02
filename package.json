@@ -6,6 +6,7 @@
   "dependencies": {
     "hyperbee": "^2.19.6",
     "hypercore": "^10.37.5",
+    "random-access-file": "^4.1.1",
     "random-access-idb": "^1.2.2",
     "random-access-memory": "^6.2.1"
   },
