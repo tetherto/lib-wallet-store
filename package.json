@@ -1,6 +1,6 @@
 {
   "name": "lib-wallet-store",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Wallet library db/storage module",
   "main": "index.js",
   "dependencies": {
